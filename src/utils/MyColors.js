@@ -3,3 +3,5 @@ export const myColors = {
     second : "white",
     third : "black"
 }
+
+

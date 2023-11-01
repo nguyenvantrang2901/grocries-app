@@ -5,7 +5,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import Splash from './src/screens/Splash';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
-import { myColors } from './src/utils/myColors';
+import {myColors} from './src/utils/MyColors';
 
 const Stack = createNativeStackNavigator()
 
