@@ -1,13 +1,40 @@
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, Button, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TextInput, Button, TouchableOpacity, Alert} from 'react-native'
 import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { myColors } from '../utils/MyColors'
 import { StatusBar } from 'expo-status-bar'
 import {Ionicons} from "@expo/vector-icons"
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import {createUserWithEmailAndPassword} from "firebase/auth"
+import authentication from "./../../Firebaseconfig"
+
 const Signup = () => {
   const nav = useNavigation()
   const [isShowPassword, setIsShowPassword] = useState(true)
+  const [userCrendetials, setUserCrendetials] = useState({
+    email:"",
+    password: ""
+  })
+  const {email, password} = userCrendetials;
+
+  const handleSignUp=()=>{
+  createUserWithEmailAndPassword(authentication, email, password)
+  .then(() => {
+    Alert.alert('User account created & signed in!');
+  })
+  .catch(error => {
+    if (error.code === 'auth/email-already-in-use') {
+      Alert.alert('That email address is already in use!');
+    }
+
+    if (error.code === 'auth/invalid-email') {
+      Alert.alert('That email address is invalid!');
+    }
+
+    console.log(first)(error);
+  });
+  }
+
   const handleLogin=()=>{
     nav.navigate("Login")
   }
@@ -42,8 +69,12 @@ const Signup = () => {
             fontWeight:"400"
           }}>Email address</Text>
           <TextInput
-              keyboardType='email-address'
-              style={{borderBottomWidth:2, borderColor:"#E3E3E3"}}
+            value={email}
+            onChangeText={(val)=>{
+              setUserCrendetials({...userCrendetials, email: val})
+            }}
+            keyboardType="email-address"
+            style={{borderBottomWidth:2, borderColor:"#E3E3E3"}}
           />
 
           <Text style={{  
@@ -59,6 +90,10 @@ const Signup = () => {
               justifyContent:'space-between', 
               flexDirection:'row'}}>
           <TextInput
+              value={password}
+              onChangeText={(val)=>{
+                setUserCrendetials({...userCrendetials, password: val})
+              }}
               secureTextEntry={isShowPassword}
               maxLength={12}
               keyboardType='ascii-capable'
@@ -88,17 +123,15 @@ const Signup = () => {
           >By continuing your agree to our Terms of Service and Privacy Policy </Text>
 
           <TouchableOpacity
-            onPress={()=>{
-              alert("ad")
-            }}
-          style={{
-            backgroundColor:myColors.primary,
-            alignItems:'center',
-            justifyContent:'center',
-            height:50,
-            borderRadius:30,
-            marginTop:10
-          }}>
+            onPress={handleSignUp}
+            style={{
+              backgroundColor:myColors.primary,
+              alignItems:'center',
+              justifyContent:'center',
+              height:50,
+              borderRadius:30,
+              marginTop:10
+            }}>
             <Text style={{
               fontSize:24,
               fontWeight:'500',
