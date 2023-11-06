@@ -1,26 +1,36 @@
 import { StyleSheet, Text, View, ScrollView, Image, TextInput, Button, TouchableOpacity, Alert} from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { myColors } from '../utils/MyColors'
 import { StatusBar } from 'expo-status-bar'
 import {Ionicons} from "@expo/vector-icons"
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
-import {createUserWithEmailAndPassword} from "firebase/auth"
-import authentication from "./../../Firebaseconfig"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { authentication, database } from "./../../Firebaseconfig"
+import { setDoc, doc } from "firebase/firestore"
+import uuid from "react-native-uuid"
 
 const Signup = () => {
   const nav = useNavigation()
   const [isShowPassword, setIsShowPassword] = useState(true)
   const [userCrendetials, setUserCrendetials] = useState({
+    name:"",
     email:"",
     password: ""
   })
-  const {email, password} = userCrendetials;
-
+  const { email, password, name } = userCrendetials;
+  // console.log("name: ", name)
+  const uid = uuid.v4()
   const handleSignUp=()=>{
   createUserWithEmailAndPassword(authentication, email, password)
   .then(() => {
-    Alert.alert('User account created & signed in!');
+    // Alert.alert('User account created & signed in!');
+    nav.navigate("Login") 
+    setDoc(doc(database, "users", uid),{
+      username : name,
+      email: email,
+      id: authentication.currentUser.uid
+    })
   })
   .catch(error => {
     if (error.code === 'auth/email-already-in-use') {
@@ -31,7 +41,7 @@ const Signup = () => {
       Alert.alert('That email address is invalid!');
     }
 
-    console.log(first)(error);
+    console.log(error);
   });
   }
 
@@ -57,6 +67,10 @@ const Signup = () => {
             fontWeight:"400"
           }}>User name</Text>
           <TextInput
+              value={name}
+              onChangeText={(val)=>{
+                setUserCrendetials({...userCrendetials, name:val})
+              }}
               maxLength={12}
               keyboardType='name-phone-pad'
               style={{borderBottomWidth:2, borderColor:"#E3E3E3"}}
