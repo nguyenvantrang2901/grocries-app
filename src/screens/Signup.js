@@ -57,7 +57,7 @@ const Signup = () => {
           source={require("../assets/mainicon.png")}
         />
         <View style={{marginTop:25, paddingHorizontal:20}}>
-          <Text style={{color:myColors.third, fontSize:24, fontWeight:'bold'}}>Sign Up</Text>
+          <Text style={{color:myColors.third, fontSize:24, fontWeight:'bold', textAlign:'center', justifyContent:'center'}}>Sign Up</Text>
           <Text style={{color:'grey', marginTop:15}}>Enter your credentials to continue</Text>
 
           <Text style={{
