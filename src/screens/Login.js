@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, Button, TouchableOpacity, Alert} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TextInput, TouchableOpacity, Alert} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { myColors } from '../utils/MyColors'
 import { StatusBar } from 'expo-status-bar'
 import {Ionicons} from "@expo/vector-icons"
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { authentication, database } from "./../../Firebaseconfig"
-import { setDoc, doc } from "firebase/firestore"
-import uuid from "react-native-uuid"
+import { useNavigation } from '@react-navigation/native'
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { authentication } from '../../Firebaseconfig'
 
 const Signup = () => {
   const nav = useNavigation()
@@ -18,8 +16,17 @@ const Signup = () => {
     password: ""
   })
   const { email, password } = loginCrendetials;
-  const handleSignUp=()=>{
-    Alert.alert("Login Success")
+  const handleLogin=()=>{
+    signInWithEmailAndPassword(authentication, email, password)
+    .then(()=>{
+      nav.navigate("Home")
+      // nav.replace("Home")
+      // Alert.alert("Login Success")
+    })
+    .catch((error)=>{
+      // Alert.alert(error.message)
+      Alert.alert("Email or password is invalid !")
+    })
   }
 
   const handleRegister=()=>{
@@ -105,7 +112,7 @@ const Signup = () => {
           >Forgot password</Text>
 
           <TouchableOpacity
-            onPress={handleSignUp}
+            onPress={handleLogin}
             style={{
               backgroundColor:myColors.primary,
               alignItems:'center',
