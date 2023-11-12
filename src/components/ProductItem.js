@@ -1,25 +1,34 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { fruits } from "../utils/Data"
 import {responsiveHeight, responsiveWidth} from "react-native-responsive-dimensions"
 import { AntDesign } from '@expo/vector-icons'
 import { myColors } from '../utils/MyColors'
+import {useNavigation} from "@react-navigation/native"
 
-const ProductItem = () => {
+const ProductItem = ({data}) => {
+    const nav = useNavigation()
   return (
     <View>
         <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={fruits}
+            data={data}
             renderItem={({item, index})=>(
-                <View style={{
-                    height: responsiveHeight(30),
-                    width: responsiveWidth(42),
-                    borderRadius: 15,
-                    marginRight: 15,
-                    borderColor: "red",
-                    borderWidth: 2,
+                <TouchableOpacity
+                    onPress={()=>{
+                        nav.navigate("DetailsItem",{
+                            //đặt tên "main" tùy chọn để truyển dữ liệu xuống component con
+                            main: item
+                        })
+                    }}
+                    activeOpacity={0.7}
+                    style={{
+                        height: responsiveHeight(30),
+                        width: responsiveWidth(42),
+                        borderRadius: 15,
+                        marginRight: 15,
+                        borderColor: "#E3E3E3",
+                        borderWidth: 2,
                 }}>
                     <Image 
                         style={{height:80, resizeMode:'contain',width:120, alignSelf:'center'}} 
@@ -31,7 +40,6 @@ const ProductItem = () => {
 
                         <View style={{flexDirection:'row', flex:1}}>
                             <Text style={{color:"grey"}}>{item.pieces} , Priceg</Text>
-                            {/* <Text style={{color:"grey"}}>, Priceg</Text> */}
                         </View>
 
                         <View style={{
@@ -44,7 +52,7 @@ const ProductItem = () => {
                             <AntDesign name="pluscircle" size={30} color={myColors.primary} />
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             )}
         />
     </View>

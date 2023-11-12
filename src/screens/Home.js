@@ -7,6 +7,7 @@ import HomeSearch from '../components/HomeSearch'
 import HomeBanner from '../components/HomeBanner'
 import ProductTitle from '../components/ProductTitle'
 import ProductItem from '../components/ProductItem'
+import { fruits, vegetables } from '../utils/Data'
 
 const Home = () => {
   return (
@@ -14,15 +15,16 @@ const Home = () => {
         <StatusBar/>
         <ScrollView 
             showsVerticalScrollIndicator={false}
-            style={{flex:1, paddingTop:10, paddingHorizontal:20}}>
+            style={{flex:1, paddingTop:10, paddingHorizontal:20}}
+        >
             <View style={{ paddingBottom:20, gap:10}}>
                 <HomeIcon/>
                 <HomeSearch/>
                 <HomeBanner/>
                 <ProductTitle title="Exclusive Offer"/>
-                <ProductItem/>
+                <ProductItem data={fruits}/>
                 <ProductTitle title="Best Selling"/>
-                <ProductItem/>
+                <ProductItem data={vegetables}/>
             </View>
         </ScrollView>
     </SafeAreaView>
