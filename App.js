@@ -8,6 +8,7 @@ import Signup from './src/screens/Signup';
 import {myColors} from './src/utils/MyColors';
 import Home from './src/screens/Home';
 import DetailsItem from './src/screens/DetailsItem';
+import Cart from './src/screens/Cart';
 
 const Stack = createNativeStackNavigator()
 
@@ -15,7 +16,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
-        initialRouteName='Home'
+        initialRouteName='Cart'
         screenOptions={{headerShown:false}}
       >
         <Stack.Screen name='Splash' component={Splash}/>
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name='Login' component={Login}/>
         <Stack.Screen name='Signup' component={Signup}/>
         <Stack.Screen name='DetailsItem' component={DetailsItem}/>
+        <Stack.Screen name='Cart' component={Cart}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
