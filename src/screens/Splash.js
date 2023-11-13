@@ -12,7 +12,8 @@ const Splash = () => {
     const nav = useNavigation()
     useEffect(()=>{
        setTimeout(()=>{
-            nav.replace("Signup")
+            // nav.replace("Signup")
+            nav.navigate("Signup")
        },3000)
     }, [])
   return (

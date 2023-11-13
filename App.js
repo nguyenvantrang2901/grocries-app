@@ -12,24 +12,83 @@ import Cart from './src/screens/Cart';
 import { Provider } from 'react-redux';
 import  {Store}  from './Redux/Store';
 import Order from './src/screens/Order';
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs"
+import Ionicons from "react-native-vector-icons/Ionicons"
+
 const Stack = createNativeStackNavigator()
 
+//Screen name
+const homePage = "Home"
+const detailsItemPage = "DetailsItem"
+const cartPage = "Cart"
+const orderPage = "Order"
+
+const Tab = createBottomTabNavigator()
 export default function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator 
+        <Tab.Navigator 
           initialRouteName='Home'
-          screenOptions={{headerShown:false}}
+          screenOptions={({route})=>({
+            headerShown:false,
+            tabBarIcon:({focused, color, size})=>{
+              let iconName;
+              let routerName = route.name
+              if(routerName===homePage){
+                iconName = focused ? "home":'home-outline'
+              }else if(routerName===detailsItemPage){
+                iconName = focused? 'list':"list-outline"
+              }else if(routerName===cartPage){
+                iconName = focused ? "cart":"cart-outline"
+              }else if(routerName===orderPage){
+                iconName = focused ? "mail":"mail-outline" 
+              }
+              return <Ionicons name={iconName} size={size} color={color}/>
+            }
+          })}
+          tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'grey',
+            labelStyle: { paddingBottom: 10, fontSize: 10 },
+            style: { padding: 10, height: 70}
+          }}
         >
-          <Stack.Screen name='Splash' component={Splash}/>
-          <Stack.Screen name='Home' component={Home}/>
-          <Stack.Screen name='Login' component={Login}/>
-          <Stack.Screen name='Signup' component={Signup}/>
-          <Stack.Screen name='DetailsItem' component={DetailsItem}/>
-          <Stack.Screen name='Cart' component={Cart}/>
-          <Stack.Screen name='Order' component={Order}/>
-        </Stack.Navigator>
+          <Tab.Screen 
+            name='Splash' 
+            component={Splash} 
+            options={()=>({
+              tabBarStyle:{
+                display:"none"
+              },
+              tabBarButton:()=>null
+            })}
+          />
+          <Tab.Screen name='Home' component={Home}/>
+          <Tab.Screen 
+            name='Login' 
+            component={Login} 
+            options={()=>({
+              tabBarStyle:{
+                display:"none"
+              },
+              tabBarButton:()=>null
+            })}
+          />
+          <Tab.Screen 
+            name='Signup' 
+            component={Signup}
+            options={()=>({
+              tabBarStyle:{
+                display:"none"
+              },
+              tabBarButton:()=>null
+            })}
+          />
+          <Tab.Screen name='DetailsItem' component={DetailsItem}/>
+          <Tab.Screen name='Cart' component={Cart}/>
+          <Tab.Screen name='Order' component={Order}/>
+        </Tab.Navigator>
       </NavigationContainer>
     </Provider>
     
