@@ -4,8 +4,12 @@ import {responsiveHeight, responsiveWidth} from "react-native-responsive-dimensi
 import { AntDesign } from '@expo/vector-icons'
 import { myColors } from '../utils/MyColors'
 import {useNavigation} from "@react-navigation/native"
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart, removeToCart } from '../../Redux/CartSlice'
 
 const ProductItem = ({data}) => {
+    const dispacth = useDispatch()
+    const storeData = useSelector((state)=>state.cartSlice)
     const nav = useNavigation()
   return (
     <View>
@@ -49,7 +53,26 @@ const ProductItem = ({data}) => {
                                 marginBottom:10
                         }}>
                             <Text style={{fontSize:16, fontWeight:"700"}}>${item.price}</Text>
-                            <AntDesign name="pluscircle" size={30} color={myColors.primary} />
+                            {
+                                storeData.some((value)=>value.name == item.name)?
+                                    <AntDesign 
+                                        name="minuscircle" 
+                                        size={30} 
+                                        color={myColors.primary} 
+                                        onPress={()=>{
+                                            dispacth(removeToCart(item))
+                                        }}
+                                    />
+                                    : <AntDesign 
+                                        name="pluscircle" 
+                                        size={30} 
+                                        color={myColors.primary} 
+                                        onPress={()=>{
+                                            dispacth(addToCart(item))
+                                        }}
+                                    />
+                            }
+                            
                         </View>
                     </View>
                 </TouchableOpacity>

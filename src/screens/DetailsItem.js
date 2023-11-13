@@ -8,10 +8,16 @@ import { useNavigation } from '@react-navigation/native'
 import { Entypo } from '@expo/vector-icons'
 import { myColors } from '../utils/MyColors'
 import DropBox from '../components/DropBox'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart } from '../../Redux/CartSlice'
 
 const DetailsItem = ({route}) => {
+    const dispacth = useDispatch()
+    const storeData = useSelector((state)=>state.cartSlice)
+    const productData = route.params.main
+
     //lấy dữ liệu từ component cha xuống
-    const {name, price, pieces, img} = route.params.main
+    const {name, price, pieces, img} = productData
     
     const nav = useNavigation()
     const [counter, setCounter] = useState(1)
@@ -45,7 +51,14 @@ const DetailsItem = ({route}) => {
                 size={24} 
                 color="black" 
             />
-            <Feather name="share" size={24} color="black" />
+            <Feather
+                onPress={()=>{
+                    nav.navigate("Cart")
+                }}
+                name="share" 
+                size={24} 
+                color="black" 
+            />
         </View>
         
 
@@ -98,19 +111,41 @@ const DetailsItem = ({route}) => {
         <DropBox/>
         <View style={{
             flex:0.9,
-            justifyContent:'flex-end'
+            justifyContent:'flex-end',
+            paddingHorizontal:10
         }}>
-            <TouchableOpacity 
-                activeOpacity={0.8}
-                style={{
-                    backgroundColor:myColors.primary,
-                    borderRadius:10,
-                    height:50,
-                    justifyContent:'center',
-                    alignItems:'center'
-            }}>
-                <Text style={{fontSize:18,color:'white', fontWeight:'bold'}}>Add to Basket</Text>
-            </TouchableOpacity>
+            {
+                storeData.some((value)=>value.name == productData.name)?
+                    <TouchableOpacity 
+                        disabled={true}
+                        activeOpacity={0.8}
+                        style={{
+                            backgroundColor:"grey",
+                            borderRadius:10,
+                            height:50,
+                            justifyContent:'center',
+                            alignItems:'center'
+                    }}>
+                        <Text style={{fontSize:18,color:'white', fontWeight:'bold'}}>Added to Basket</Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity 
+                        onPress={()=>{
+                            dispacth(addToCart(productData))
+                            nav.navigate("Cart")
+                        }}
+                        activeOpacity={0.8}
+                        style={{
+                            backgroundColor:myColors.primary,
+                            borderRadius:10,
+                            height:50,
+                            justifyContent:'center',
+                            alignItems:'center'
+                    }}>
+                        <Text style={{fontSize:18,color:'white', fontWeight:'bold'}}>Add to Basket</Text>
+                    </TouchableOpacity>
+            }
+            
         </View>
     </View>
   )
